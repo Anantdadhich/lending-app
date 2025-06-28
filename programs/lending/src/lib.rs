@@ -3,7 +3,7 @@ use instructions::*;
 
 mod state;
 mod instructions;
-
+mod error;
 
 
 declare_id!("BrrQ3W1GLKS7RrL7wpP9UX39en6zkXkvZKEz8ouS8L2w");
@@ -27,7 +27,11 @@ pub mod lending {
          process_init_user(ctx, usdc_address);
         Ok(())
     }
-
+  
+     pub fn deposit(ctx:Context<Deposit>,amount:u64)->Result<()>{
+           process_deposit(ctx, amount);
+        Ok(())
+     }
     
            
 

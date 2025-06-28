@@ -5,10 +5,10 @@ use crate::state::*;
 
 #[derive(Accounts)]
 pub struct InitBank<'info>{
-   #[account(mut)]
-    pub signer:Signer<'info>, 
+     #[account(mut)]
+     pub signer:Signer<'info>, 
       
-    pub mint:InterfaceAccount<'info,Mint> ,
+     pub mint:InterfaceAccount<'info,Mint> ,
      //created pda for the bank account using mint add as a seed 
      #[account(
       init,
@@ -16,9 +16,9 @@ pub struct InitBank<'info>{
       space=8+Bank::INIT_SPACE,   //each. bank has one instance 
       seeds=[mint.key().as_ref()],
       bump
-     )]
+      )]
     
-    pub bank:Account<'info,Bank> , 
+     pub bank:Account<'info,Bank> , 
      
      #[account(
       init,
@@ -27,12 +27,12 @@ pub struct InitBank<'info>{
       payer=signer,
       seeds=[b"treasury",mint.key().as_ref()],
       bump,
- )] 
+      )] 
 
      pub bank_token_account:InterfaceAccount<'info,TokenAccount>,  // this is treasury account  where all the accounts stored  
 
-    pub token_program:Interface<'info,TokenInterface>,
-    pub system_program:Program<'info,System>,
+     pub token_program:Interface<'info,TokenInterface>,
+     pub system_program:Program<'info,System>,
 
 
 }
@@ -56,7 +56,7 @@ pub struct InitUser<'info>{
 
 pub fn process_init_bank(ctx:Context<InitBank>,liquidation_threshold:u64,max_ltv:u64)->Result<()>{
     
-   let bank=&mut ctx.accounts.bank;
+    let bank=&mut ctx.accounts.bank;
     bank.mint_address=ctx.accounts.mint.key();
     bank.authority=ctx.accounts.signer.key();
     bank.liquidation_threshold=liquidation_threshold;
@@ -69,8 +69,8 @@ pub fn process_init_bank(ctx:Context<InitBank>,liquidation_threshold:u64,max_ltv
 
 pub fn process_init_user(ctx:Context<InitUser>,usdc_address:Pubkey)->Result<()> {
    
-   let user=&mut ctx.accounts.user_account;
-   user.owner=ctx.accounts.signer.key() ;
+    let user=&mut ctx.accounts.user_account;
+    user.owner=ctx.accounts.signer.key() ;
 
    user.usdc_address=usdc_address;
 
@@ -79,3 +79,4 @@ pub fn process_init_user(ctx:Context<InitUser>,usdc_address:Pubkey)->Result<()> 
     
     Ok(())
 }
+
