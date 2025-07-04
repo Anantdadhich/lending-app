@@ -4,6 +4,7 @@ use instructions::*;
 mod state;
 mod instructions;
 mod error;
+mod constants;
 
 
 declare_id!("BrrQ3W1GLKS7RrL7wpP9UX39en6zkXkvZKEz8ouS8L2w");
@@ -33,8 +34,20 @@ pub mod lending {
         Ok(())
      }
     
-           
+    pub fn withdraw(ctx:Context<Withdraw>,amount:u64)->Result<()>{
+          process_withdraw(ctx, amount);
+          Ok(())
+    }
 
+    pub fn borrow(ctx:Context<Borrow>,amount:u64)->Result<()>{
+          process_borrow(ctx, amount);
+        Ok(())
+    }
+           
+   pub fn repay(ctx:Context<Repay>,amount:u64)->Result<()>{
+    process_repay(ctx, amount);
+    Ok(())
+   }
      
 }
 

@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_spl::associated_token::AssociatedToken;
+use anchor_spl::mint;
 use anchor_spl::token_interface::{ self, Mint, TokenAccount, TokenInterface, TransferChecked };
 use crate::state::*;
 use crate::error::ErrorCode;
@@ -62,16 +63,54 @@ pub fn process_withdraw(ctx:Context<Withdraw>,amount:u64)->Result<()> {
       //check if user try to withdraw more than have 
 
       if amount > deposited_value {
-      return Err(ErrorCode::InsufficientFunds.into());
+       return Err(ErrorCode::InsufficientFunds.into());
       } 
 
-      let transfer_cpi_acconts=TransferChecked{
+      let transfer_cpi_accounts=TransferChecked{
         from:ctx.accounts.bank_token_account.to_account_info(),
         mint:ctx.accounts.mint.to_account_info(),
         to:ctx.accounts.user_token_account.to_account_info(),
         authority:ctx.accounts.bank_token_account.to_account_info()
       };
+      
+      let cpi_program=ctx.accounts.token_program.to_account_info();
 
+
+     //prepare signer key 
+       let mint_key=ctx.accounts.mint.key();  
+        
+       let signer_keys:&[&[&[u8]]]=&[
+        &[
+          b"treasury",
+          mint_key.as_ref(),
+          &[ctx.bumps.bank_token_account]
+        ]
+       ]; 
+
+        let cpi_ctx=CpiContext::new(cpi_program, transfer_cpi_accounts).with_signer(signer_keys); 
+         
+         let decimals=ctx.accounts.mint.decimals; 
+
+         token_interface::transfer_checked(cpi_ctx, amount, decimals)?;
+
+  
+         let bank=&mut ctx.accounts.bank; 
+   
+         let user=&mut ctx.accounts.user_account; 
+         
+         let shares_to_remove=(amount as f64 /bank.total_deposits as f64 ) * bank.total_deposits_shares as f64 ;
+
+          if ctx.accounts.mint.to_account_info().key() == user.usdc_address {
+            user.deposited_usdc -= shares_to_remove as u64
+          } else {
+            user.deposited_sol -= shares_to_remove as u64
+          }
+        
+        bank.total_deposits -= amount ;
+        bank.total_deposits_shares -=shares_to_remove as u64; 
+
+
+         
 
 
     Ok(())
