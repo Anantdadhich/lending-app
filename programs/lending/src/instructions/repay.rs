@@ -95,7 +95,7 @@ pub fn process_repay(ctx:Context<Repay>,amount:u64)->Result<()>{
 
         let decimals=ctx.accounts.mint.decimals;
 
-        token_interface::transfer_checked(cpi_ctx, amount, decimals);
+        token_interface::transfer_checked(cpi_ctx, amount, decimals)?;
         
         let borrowed_ratio=amount.checked_div(borrow_asset).unwrap();
         let user_shares=bank.total_borrowed_shares.checked_mul(borrowed_ratio).unwrap(); 

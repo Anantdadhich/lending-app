@@ -160,7 +160,7 @@ pub fn process_borrow(ctx:Context<Borrow>,amount:u64)->Result<()>{
 }
 
 
-fn calculate_accured_interest(deposited_ammount:u64,bank_interest:u64,last_updated:i64)->Result<(u64)>{
+fn calculate_accured_interest(deposited_ammount:u64,bank_interest:u64,last_updated:i64)->Result<u64>{
     let current_time=Clock::get()?.unix_timestamp; 
     let time_diff=current_time-last_updated;
     let new_rate=(deposited_ammount as f64 *E.powf(bank_interest as f32 *time_diff as f32) as f64 )as u64; 

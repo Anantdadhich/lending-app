@@ -9,6 +9,9 @@ pub enum ErrorCode{
      OverBorrowableAmount,
        #[msg("amount exceed the borrow amount ")] 
 
-     OverRepaythenBorrowAmount
+     OverRepaythenBorrowAmount,
+#[msg("insufficient collateral ")] 
+
+     InsficientCollateral
 
 }
