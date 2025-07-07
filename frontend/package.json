@@ -21,6 +21,7 @@
     "@wallet-ui/tailwind": "1.1.0-canary-20250605143849",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.0",
     "gill": "0.9.1",
     "jotai": "^2.12.5",
     "lucide-react": "^0.513.0",
