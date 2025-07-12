@@ -1,3 +1,8 @@
+
+
+#![allow(unexpected_cfgs)]
+#![allow(deprecated)]
+
 use anchor_lang::prelude::*;
 use instructions::*;  
 
@@ -20,7 +25,7 @@ pub mod lending {
 
     pub fn init_bank(ctx:Context<InitBank>,liquidation_threshold:u64,max_ltv:u64)->Result<()> {
 
-           process_init_bank(ctx, liquidation_threshold, max_ltv);
+       process_init_bank(ctx, liquidation_threshold, max_ltv);
         Ok(()) 
     }
 
